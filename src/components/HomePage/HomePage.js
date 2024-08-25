@@ -3,6 +3,7 @@ import airportsData from '../../bd/airports.json';
 import { searchFlights } from '../../services/amadeusService';
 import FlightResults from '../FlightResults/FlightResults';
 import FlightSearchForm from '../FlightSearchForm/FlightSearchForm';
+import './HomePage.scss';
 
 const HomePage = () => {
   const [airports, setAirports] = useState([]);
@@ -25,7 +26,6 @@ const HomePage = () => {
   const handleOriginSearchChange = (e) => {
     const value = e.target.value;
     setOriginSearch(value);
-
     setLoadingResults(true);
 
     if (value.length > 1) {
@@ -34,7 +34,6 @@ const HomePage = () => {
           airport.name.toLowerCase().includes(value.toLowerCase())
         );
         setOriginSuggestions(filteredAirports.slice(0, 10));
-
         setLoadingResults(false);
       }, 500);
     } else {
@@ -52,24 +51,21 @@ const HomePage = () => {
   const handleDestinationSearchChange = (e) => {
     const value = e.target.value;
     setDestinationSearch(value);
-  
     setLoadingResults(true);
-  
+
     if (value.length > 1) {
       setTimeout(() => {
         const filteredAirports = airports.filter((airport) =>
           airport.city.toLowerCase().includes(value.toLowerCase())
         );
         setDestinationSuggestions(filteredAirports.slice(0, 10));
-        
         setLoadingResults(false);
-      }, 500); 
+      }, 500);
     } else {
       setDestinationSuggestions([]);
       setLoadingResults(false);
     }
   };
-  
 
   const handleSelectDestination = (code) => {
     setDestination(code);
@@ -112,7 +108,7 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div className='container'>
+    <div className="home-page">
       <FlightSearchForm
         originSearch={originSearch}
         handleOriginSearchChange={handleOriginSearchChange}
@@ -133,10 +129,8 @@ const HomePage = () => {
         handleSearch={handleSearch}
         loadingResults={loadingResults}
       />
-
       {error && <p>{error}</p>}
-
-      <FlightResults results={results} formatDuration={formatDuration} loading={loading}/>
+      <FlightResults results={results} formatDuration={formatDuration} loading={loading} />
     </div>
   );
 };

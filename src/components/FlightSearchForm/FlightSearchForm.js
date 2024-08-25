@@ -1,4 +1,5 @@
 import React from 'react';
+import './FlightSearchForm.scss';
 
 const FlightSearchForm = ({
   originSearch,
@@ -18,78 +19,104 @@ const FlightSearchForm = ({
   adults,
   setAdults,
   handleSearch,
-  loadingResults
+  loadingResults,
 }) => {
   return (
-    <form onSubmit={handleSearch}>
-      {/* Origin input */}
-      <input
-        type='text'
-        placeholder='Origin (e.g. HEL)'
-        value={originSearch}
-        onChange={handleOriginSearchChange}
-        required
-      />
-      <ul>
-        {loadingResults ? (
-          <li>Loading...</li>
-        ) : (
-          originSuggestions.map((airport, index) => (
-            <li key={index} onClick={() => handleSelectOrigin(airport.code)}>
-              {airport.name} ({airport.code}) - {airport.city}, {airport.country}
-            </li>
-          ))
-        )}
-      </ul>
+    <form className='flight-search-form' onSubmit={handleSearch}>
+      <div className='flight-search-form__row'>
+        <div className='flight-search-form-origin'>
+          <input
+            type='text'
+            placeholder='Origin (e.g. HEL)'
+            value={originSearch}
+            onChange={handleOriginSearchChange}
+            required
+            className='flight-search-form__input'
+          />
+          {originSuggestions.length > 0 && (
+            <ul className='select-origin'>
+              {loadingResults ? (
+                <li>Loading...</li>
+              ) : (
+                originSuggestions.map((airport, index) => (
+                  <li
+                    key={index}
+                    onClick={() => handleSelectOrigin(airport.code)}
+                  >
+                    {airport.name} ({airport.code}) - {airport.city},{' '}
+                    {airport.country}
+                  </li>
+                ))
+              )}
+            </ul>
+          )}
+        </div>
 
-      {/* Destination input */}
-      <input
-        type='text'
-        placeholder='Destination (e.g. PAR)'
-        value={destinationSearch}
-        onChange={handleDestinationSearchChange}
-        required
-      />
-      <ul>
-        {destinationSuggestions.map((airport, index) => (
-          <li key={index} onClick={() => handleSelectDestination(airport.code)}>
-            {airport.name} ({airport.code}) - {airport.city}, {airport.country}
-          </li>
-        ))}
-      </ul>
+        {/* Destination input */}
+        <div className='flight-search-form-destination'>
+          <input
+            type='text'
+            placeholder='Destination (e.g. PAR)'
+            value={destinationSearch}
+            onChange={handleDestinationSearchChange}
+            required
+            className='flight-search-form__input'
+          />
+          {destinationSuggestions.length > 0 && (
+            <ul className='select-destination'>
+              {loadingResults ? (
+                <li>Loading...</li>
+              ) : (
+                destinationSuggestions.map((airport, index) => (
+                  <li
+                    key={index}
+                    onClick={() => handleSelectDestination(airport.code)}
+                  >
+                    {airport.name} ({airport.code}) - {airport.city},{' '}
+                    {airport.country}
+                  </li>
+                ))
+              )}
+            </ul>
+          )}
+        </div>
 
-      {/* Other inputs */}
-      <input
-        type='date'
-        placeholder='Departure Date'
-        value={departureDate}
-        onChange={(e) => setDepartureDate(e.target.value)}
-        required
-      />
-      <input
-        type='date'
-        placeholder='Return Date'
-        value={returnDate}
-        onChange={(e) => setReturnDate(e.target.value)}
-        required
-      />
-      <label>
+        {/* Other inputs */}
+        <div>
+          <input
+            type='date'
+            placeholder='Departure Date'
+            value={departureDate}
+            onChange={(e) => setDepartureDate(e.target.value)}
+            required
+            className='flight-search-form__input date'
+          />
+        </div>
+        <div>
         <input
-          type='checkbox'
-          checked={directFlight}
-          onChange={(e) => setDirectFlight(e.target.checked)}
+          type='date'
+          placeholder='Return Date'
+          value={returnDate}
+          onChange={(e) => setReturnDate(e.target.value)}
+          required
+          className='flight-search-form__input date'
         />
-        Direct Flight
-      </label>
-      <input
-        type='number'
-        placeholder='Number of Adults'
-        value={adults}
-        onChange={(e) => setAdults(e.target.value)}
-        min='1'
-        required
-      />
-      <button type='submit'>Search Flights</button>
+        </div>
+        <div>
+        <input
+          type='number'
+          placeholder='Number of Adults'
+          value={adults}
+          onChange={(e) => setAdults(e.target.value)}
+          min='1'
+          required
+          className='flight-search-form__input passengers'
+        />
+        </div>
+        <button className='flight-search-form__button' type='submit'>
+          Search
+        </button>
+      </div>
     </form>
   );
 };

@@ -1,2 +1,98 @@
 // import main scss file
 @import '../../styles/main';
+
+.flight-search-form {
+  width: 100%;
+  max-width: 87.5rem;
+  background-color: $search-form-bg;
+  padding: 2px;
+  border-radius: .5rem;
+  box-shadow: 0 .25rem .5rem rgba(0, 0, 0, 0.1);
+  z-index: 1;
+
+  &-origin, &-destination {
+    position: relative;
+    flex: 1;
+  }
+
+  .select-origin, .select-destination {
+    @include list-reset;
+    margin-top: 5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 18.75rem;
+    width: 26.875rem;
+    background-color: $secondary-color;
+    overflow: auto;
+    position: absolute;
+    color: white;
+    border-radius: .5rem;
+    z-index: 2;
+
+    li {
+      display: flex;
+      align-items: center;
+      padding: .5rem;
+      min-height: 55px;
+      transition: background-color 0.3s;
+    }
+
+    li:hover {
+      background-color: $dropdown-hover;
+      color: $white-color;
+      cursor: pointer;
+    }
+  }
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+
+    div {
+      display: flex;
+      flex: 1; 
+      min-width: 12rem; 
+    }
+
+    div:first-child input {
+      border-top-left-radius: 0.5rem;
+      border-bottom-left-radius: 0.5rem;
+    }
+
+    div:nth-last-child(2) input {
+      border-top-right-radius: 0.5rem;
+      border-bottom-right-radius: 0.5rem;
+    }
+  }
+
+  &__input {
+    flex: 1;
+    padding: 0.8rem;
+    border: none;
+    min-height: 3.4375rem;
+    font-size: $font-size-base;
+    color: $white-color;
+    background-color: $background-color;
+    border-radius: 0;
+
+  }
+
+  &__button {
+    width: auto;
+    padding: 1rem;
+    background-color: $search-form-bg;
+    color: $text-color;
+    border: none;
+    border-radius: 4px;
+    font-size: 1.2rem;
+    font-weight: $font-weight-bold;
+    cursor: pointer;
+
+    &:hover {
+      background-color: darken($button-hover, 10%);
+    }
+  }
+}

@@ -1,17 +1,17 @@
 import React from 'react';
+import './FlightResults.scss';
 
 const FlightResults = ({ results, formatDuration, loading }) => {
   
   return (
-    <ul>
+    <ul className="flight-results">
       {loading ? (
         <li>Loading...</li>
       ) : (
         results.map((flight, index) => (
-          <li key={index}>
+          <li key={index} className="flight-results__item">
             {flight.itineraries.map((itinerary, index) => (
               <div key={index}>
-                <h3>Itinerary {index + 1}</h3>
                 <p>Price: {flight.price.total}</p>
                 <p>Duration: {formatDuration(itinerary.duration)}</p>
                 <div>
