@@ -1,10 +1,15 @@
 import './App.scss';
+import Footer from './components/Footer/Footer';
+import Header from './components/Header/Header';
+import HomePage from './components/HomePage/HomePage';
 import logo from './logo.svg';
 
 function App() {
   return (
     <div className="app-container">
-      <h1>Flight Search App</h1>
+      <Header />
+      <HomePage />
+      <Footer />
     </div>
   );
 }

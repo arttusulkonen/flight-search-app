@@ -1,0 +1,82 @@
+// import main scss file
+@import '../../styles/main';
+
+.homepage {
+  &__container {
+    padding: 20px 0;
+  }
+
+  &__search-section {
+    background-color: $primary-color;
+    padding: 40px 0;
+    color: $white-color;
+    text-align: center;
+  }
+
+  &__title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+
+  &__form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  &__label {
+    font-size: 1rem;
+    margin-bottom: 5px;
+  }
+
+  &__input {
+    padding: 10px;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid $secondary-color;
+    font-size: 1rem;
+  }
+
+  &__button {
+    background-color: $secondary-color;
+    color: $white-color;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: darken($secondary-color, 10%);
+    }
+  }
+
+  &__info-section {
+    background-color: $background-color;
+    padding: 40px 0;
+  }
+
+  &__info-title {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  &__info-text {
+    text-align: center;
+    font-size: 1rem;
+    color: $text-color;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}

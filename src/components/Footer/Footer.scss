@@ -1,0 +1,19 @@
+// import main scss file
+@import '../../styles/main';
+
+.footer {
+  background-color: $secondary-color;
+  padding: 10px 0;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+
+  &__container {
+    @include flex-center;
+  }
+
+  &__text {
+    color: $white-color;
+    font-size: 1rem;
+  }
+}

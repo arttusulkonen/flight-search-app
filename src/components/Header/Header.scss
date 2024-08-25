@@ -1,0 +1,17 @@
+// import main scss file
+@import '../../styles/main';
+
+.header {
+  background-color: $primary-color;
+  padding: 20px 0;
+
+  &__container {
+    @include flex-center;
+  }
+
+  &__title {
+    color: $white-color;
+    font-size: $font-size-heading;
+    font-family: $font-family-base;
+  }
+}
