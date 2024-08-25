@@ -1,16 +1,81 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import airportsData from '../../bd/airports.json';
 import { searchFlights } from '../../services/amadeusService';
+import FlightResults from '../FlightResults/FlightResults';
+import FlightSearchForm from '../FlightSearchForm/FlightSearchForm';
 
 const HomePage = () => {
-  const [origin, setOrigin] = useState('');  
-  const [destination, setDestination] = useState(''); 
-  const [departureDate, setDepartureDate] = useState(''); 
+  const [airports, setAirports] = useState([]);
+  const [origin, setOrigin] = useState('');
+  const [destination, setDestination] = useState('');
+  const [departureDate, setDepartureDate] = useState('');
   const [returnDate, setReturnDate] = useState('');
   const [directFlight, setDirectFlight] = useState(false);
-  const [adults, setAdults] = useState(1); 
-  const [results, setResults] = useState([]); 
-  const [loading, setLoading] = useState(false);  
-  const [error, setError] = useState(''); 
+  const [adults, setAdults] = useState(1);
+  const [results, setResults] = useState([]);
+  const [loadingResults, setLoadingResults] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const [originSearch, setOriginSearch] = useState('');
+  const [destinationSearch, setDestinationSearch] = useState('');
+  const [originSuggestions, setOriginSuggestions] = useState([]);
+  const [destinationSuggestions, setDestinationSuggestions] = useState([]);
+
+  const handleOriginSearchChange = (e) => {
+    const value = e.target.value;
+    setOriginSearch(value);
+
+    setLoadingResults(true);
+
+    if (value.length > 1) {
+      setTimeout(() => {
+        const filteredAirports = airports.filter((airport) =>
+          airport.name.toLowerCase().includes(value.toLowerCase())
+        );
+        setOriginSuggestions(filteredAirports.slice(0, 10));
+
+        setLoadingResults(false);
+      }, 500);
+    } else {
+      setOriginSuggestions([]);
+      setLoadingResults(false);
+    }
+  };
+
+  const handleSelectOrigin = (code) => {
+    setOrigin(code);
+    setOriginSearch(code);
+    setOriginSuggestions([]);
+  };
+
+  const handleDestinationSearchChange = (e) => {
+    const value = e.target.value;
+    setDestinationSearch(value);
+  
+    setLoadingResults(true);
+  
+    if (value.length > 1) {
+      setTimeout(() => {
+        const filteredAirports = airports.filter((airport) =>
+          airport.city.toLowerCase().includes(value.toLowerCase())
+        );
+        setDestinationSuggestions(filteredAirports.slice(0, 10));
+        
+        setLoadingResults(false);
+      }, 500); 
+    } else {
+      setDestinationSuggestions([]);
+      setLoadingResults(false);
+    }
+  };
+  
+
+  const handleSelectDestination = (code) => {
+    setDestination(code);
+    setDestinationSearch(code);
+    setDestinationSuggestions([]);
+  };
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -18,8 +83,16 @@ const HomePage = () => {
     setError('');
 
     try {
-      const data = await searchFlights(origin, destination, departureDate, returnDate, directFlight, adults, 10); 
-      setResults(data.data);  
+      const data = await searchFlights(
+        origin,
+        destination,
+        departureDate,
+        returnDate,
+        directFlight,
+        adults,
+        10
+      );
+      setResults(data.data);
     } catch (error) {
       setError('Error fetching flight data');
     } finally {
@@ -34,79 +107,36 @@ const HomePage = () => {
     return `${hours} ${minutes}`.trim();
   };
 
-  return (
-    <div>
-      <form onSubmit={handleSearch}>
-        <input
-          type="text"
-          placeholder="Origin (e.g. HEL)"
-          value={origin}
-          onChange={(e) => setOrigin(e.target.value)}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Destination (e.g. PAR)"
-          value={destination}
-          onChange={(e) => setDestination(e.target.value)}
-          required
-        />
-        <input
-          type="date"
-          placeholder="Departure Date"
-          value={departureDate}
-          onChange={(e) => setDepartureDate(e.target.value)}
-          required
-        />
-        <input 
-          type="date"
-          placeholder="Return Date"
-          value={returnDate}
-          onChange={(e) => setReturnDate(e.target.value)}
-          required
-        />
-        <label>
-          <input
-            type="checkbox"
-            checked={directFlight}
-            onChange={(e) => setDirectFlight(e.target.checked)}
-          />
-          Direct Flight
-        </label>
-        <input
-          type="number"
-          placeholder="Number of Adults"
-          value={adults}
-          onChange={(e) => setAdults(e.target.value)}
-          min="1"
-          required
-        />
-        <button type="submit">Search Flights</button>
-      </form>
+  useEffect(() => {
+    setAirports(airportsData);
+  }, []);
 
-      {loading && <p>Loading...</p>}
+  return (
+    <div className='container'>
+      <FlightSearchForm
+        originSearch={originSearch}
+        handleOriginSearchChange={handleOriginSearchChange}
+        originSuggestions={originSuggestions}
+        handleSelectOrigin={handleSelectOrigin}
+        destinationSearch={destinationSearch}
+        handleDestinationSearchChange={handleDestinationSearchChange}
+        destinationSuggestions={destinationSuggestions}
+        handleSelectDestination={handleSelectDestination}
+        departureDate={departureDate}
+        returnDate={returnDate}
+        setDepartureDate={setDepartureDate}
+        setReturnDate={setReturnDate}
+        directFlight={directFlight}
+        setDirectFlight={setDirectFlight}
+        adults={adults}
+        setAdults={setAdults}
+        handleSearch={handleSearch}
+        loadingResults={loadingResults}
+      />
+
       {error && <p>{error}</p>}
 
-      <ul>
-        {results.map((flight, index) => (
-          <li key={index}>
-            {flight.itineraries.map((itinerary, index) => (
-              <div key={index}>
-                <h3>Itinerary {index + 1}</h3>
-                <p>Price: {flight.price.total}</p>
-                {/* for duration I get this data PT2H45M */}
-                 <p>Duration: {formatDuration(itinerary.duration)}</p>
-                <p>{itinerary.segments.map((segment, index) => (
-                  <p key={index}>
-                    <p>Departure: {segment.departure.iataCode}</p>
-                    <p>Arrival: {segment.arrival.iataCode}</p>
-                  </p>
-                ))}</p>
-              </div>
-            ))}
-          </li>
-        ))}
-      </ul>
+      <FlightResults results={results} formatDuration={formatDuration} loading={loading}/>
     </div>
   );
 };
